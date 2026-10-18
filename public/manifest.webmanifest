@@ -1,0 +1,10 @@
+{
+  "name": "Aslan ile Kelimeler",
+  "short_name": "Aslan Kelime",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFF8E7",
+  "theme_color": "#FDB913",
+  "icons": [{ "src": "/lion.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
