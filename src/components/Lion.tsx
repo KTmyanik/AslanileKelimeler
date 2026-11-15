@@ -100,6 +100,42 @@ export function Lion({ mood = 'happy', outfit = 'none', size = 160, className = 
           <circle cx="116" cy="36" r="3.5" fill={RED} />
         </g>
       )}
+
+      {outfit === 'glasses' && (
+        <g>
+          <path d="M66 96 L54 90 M134 96 L146 90" stroke={BROWN} strokeWidth="4" strokeLinecap="round" />
+          <path d="M96 98 Q100 93 104 98" stroke={BROWN} strokeWidth="4" fill="none" strokeLinecap="round" />
+          <circle cx="81" cy="101" r="15" fill="#2B1A10" stroke={BROWN} strokeWidth="4" />
+          <circle cx="119" cy="101" r="15" fill="#2B1A10" stroke={BROWN} strokeWidth="4" />
+          <path d="M73 95 L79 91 M111 95 L117 91" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.8" />
+        </g>
+      )}
+
+      {outfit === 'bowtie' && (
+        <g stroke="#2A8AD6" strokeWidth="2" strokeLinejoin="round">
+          <path d="M100 162 L78 150 L78 174 Z" fill="#4CB4FF" />
+          <path d="M100 162 L122 150 L122 174 Z" fill="#4CB4FF" />
+          <circle cx="100" cy="162" r="6" fill="#2A8AD6" />
+        </g>
+      )}
+
+      {outfit === 'party' && (
+        <g>
+          <path d="M100 8 L72 62 L128 62 Z" fill="#9B6BFF" stroke="#7246D6" strokeWidth="3" strokeLinejoin="round" />
+          <path d="M88 32 L112 32 M81 47 L119 47" stroke={YELLOW} strokeWidth="5" strokeLinecap="round" />
+          <circle cx="100" cy="8" r="8" fill="#FF6B6B" />
+        </g>
+      )}
+
+      {outfit === 'wizard' && (
+        <g>
+          <path d="M76 52 L106 0 L126 52 Z" fill="#4B3BAA" stroke="#2E2270" strokeWidth="3" strokeLinejoin="round" />
+          <circle cx="104" cy="34" r="3.5" fill={YELLOW} />
+          <circle cx="112" cy="20" r="2.5" fill={YELLOW} />
+          <circle cx="94" cy="44" r="2" fill={YELLOW} />
+          <path d="M62 52 Q100 38 138 52 Q100 64 62 52 Z" fill="#3B2A8A" stroke="#2E2270" strokeWidth="2" />
+        </g>
+      )}
     </svg>
   )
 }

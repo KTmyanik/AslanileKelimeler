@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BadgeToast } from './components/BadgeToast'
 import { Cards } from './screens/Cards'
 import { DailyMission } from './screens/DailyMission'
@@ -12,11 +12,18 @@ import { RecordGame } from './screens/RecordGame'
 import { SentenceGame } from './screens/SentenceGame'
 import { SpellGame } from './screens/SpellGame'
 import { Rewards } from './screens/Rewards'
+import { RoadMap } from './screens/RoadMap'
+import { Album } from './screens/Album'
 import type { Screen } from './types'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
   const home = () => setScreen('home')
+
+  // Each screen starts at its top; otherwise a game opens where the home page was scrolled to.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [screen])
 
   return (
     <div className="min-h-dvh">
@@ -31,6 +38,8 @@ export default function App() {
       {screen === 'hint' && <HintGame onHome={home} />}
       {screen === 'record' && <RecordGame onHome={home} />}
       {screen === 'rewards' && <Rewards onHome={home} />}
+      {screen === 'map' && <RoadMap onHome={home} />}
+      {screen === 'album' && <Album onHome={home} />}
       {screen === 'parent' && <ParentArea onExit={home} />}
       {screen !== 'parent' && <BadgeToast />}
     </div>

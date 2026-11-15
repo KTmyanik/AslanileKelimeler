@@ -1,5 +1,7 @@
 import { STATUS_LABEL, STATUS_STYLE, statusOf, todayKey } from '../../lib/learning'
+import { packGoal } from '../../lib/packs'
 import { useLists, useStore } from '../../store'
+import { GoalBar } from './Packs'
 import type { WordStatus } from '../../types'
 
 const BAR: Record<WordStatus, string> = { new: 'bg-sky', learning: 'bg-tangerine', learned: 'bg-leaf' }
@@ -11,6 +13,7 @@ export function Progress() {
   const playDays = useStore((s) => s.playDays)
   const badges = useStore((s) => s.earnedBadges.length)
   const lists = useLists()
+  const goal = packGoal(words)
 
   const count = (st: WordStatus, ws = words) => ws.filter((w) => statusOf(w) === st).length
   const totals = { new: count('new'), learning: count('learning'), learned: count('learned') }
@@ -59,6 +62,13 @@ export function Progress() {
           Bir kelime arka arkaya 3 kez doğru bilindiğinde “Öğrendi” sayılır. Yanlış yapılan kelimeler oyunlarda daha sık çıkar.
         </p>
       </section>
+
+      {goal.added > 0 && (
+        <section className="card-soft flex flex-col gap-3 p-5">
+          <h2 className="text-lg font-extrabold">🎯 Paket hedefi</h2>
+          <GoalBar goal={goal} />
+        </section>
+      )}
 
       {lists.length > 0 && (
         <section className="card-soft flex flex-col gap-3 p-5">

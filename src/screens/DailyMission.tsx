@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { KidButton, LionTalk, ProgressDots, TopBar } from '../components/ui'
+import { KidButton, LionTalk, ProgressDots, PromptPicture, TopBar } from '../components/ui'
 import { celebrate } from '../lib/celebrate'
 import { distractors, shuffle } from '../lib/learning'
+import { showsPicture } from '../lib/level'
 import { sfx } from '../lib/sfx'
 import { speak } from '../lib/speech'
 import { useStore } from '../store'
@@ -123,8 +124,10 @@ function StepView({
   onSolved: (firstTry: boolean) => void
   onMiss: () => void
 }) {
+  const level = useStore((s) => s.level)
   const [wrongIds, setWrongIds] = useState<string[]>([])
   const [solved, setSolved] = useState(false)
+  const held = !showsPicture(step.target, level)
 
   const choose = (word: Word) => {
     if (solved || wrongIds.includes(word.id)) return
@@ -145,7 +148,7 @@ function StepView({
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-6">
       <div className="text-center">
-        <div className="emoji text-8xl">{step.target.emoji}</div>
+        <PromptPicture emoji={step.target.emoji} held={held} revealed={solved} />
         <div className="mt-2 text-4xl font-extrabold">{step.target.tr || '???'}</div>
         <div className="mt-1 text-lg font-bold text-ink-soft">{solved ? step.target.en : 'İngilizcesini seç'}</div>
       </div>

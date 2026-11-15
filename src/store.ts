@@ -4,7 +4,8 @@ import { BADGES, type BadgeStats } from './lib/badges'
 import { pickDailyWords } from './lib/daily'
 import { normalizeEn, statusOf, todayKey, wordsInList } from './lib/learning'
 import { SEED_LIST, SEED_WORDS } from './lib/seed'
-import type { DailyMission, Outfit, Sentence, Word, WordDraft } from './types'
+import { longestStreak, weeksAtGoal } from './lib/streak'
+import type { DailyMission, GameLevel, Outfit, Sentence, Word, WordDraft } from './types'
 
 export const DEFAULT_PIN = '1234'
 
@@ -22,6 +23,9 @@ interface PersistedState {
   sentences: Sentence[]
   daily: DailyMission | null
   listenBest: number
+  /** Best "Rekor" score on the text level; reading is slower than spotting a picture, so it has its own record. */
+  listenBestText: number
+  level: GameLevel
 }
 
 interface State extends PersistedState {
@@ -44,7 +48,8 @@ interface State extends PersistedState {
   deleteSentence: (id: string) => void
   ensureDaily: () => void
   markDailyDone: (id: string) => void
-  setListenBest: (score: number) => void
+  setListenBest: (score: number, level: GameLevel) => void
+  setLevel: (level: GameLevel) => void
 }
 
 const uid = () => crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
@@ -72,6 +77,8 @@ function statsOf(s: PersistedState): BadgeStats {
     sessions: s.sessions,
     perfectGames: s.perfectGames,
     days: s.playDays.length,
+    streak: longestStreak(s.playDays),
+    weekGoals: weeksAtGoal(s.playDays),
   }
 }
 
@@ -104,6 +111,8 @@ const initial: PersistedState = {
   sentences: [],
   daily: null,
   listenBest: 0,
+  listenBestText: 0,
+  level: 'picture',
 }
 
 export const useStore = create<State>()(
@@ -182,6 +191,7 @@ export const useStore = create<State>()(
           playDays: [],
           outfit: 'none',
           listenBest: 0,
+          listenBestText: 0,
           daily: null,
         })),
 
@@ -219,7 +229,13 @@ export const useStore = create<State>()(
           return { daily: { ...s.daily, doneIds: [...s.daily.doneIds, id] } }
         }),
 
-      setListenBest: (score) => set((s) => (score > s.listenBest ? { listenBest: score } : s)),
+      setListenBest: (score, level) =>
+        set((s) => {
+          if (level === 'text') return score > s.listenBestText ? { listenBestText: score } : s
+          return score > s.listenBest ? { listenBest: score } : s
+        }),
+
+      setLevel: (level) => set({ level }),
 
       importBackup: (data) =>
         set(() => ({
@@ -228,6 +244,8 @@ export const useStore = create<State>()(
           words: Array.isArray(data.words) ? data.words : initial.words,
           sentences: Array.isArray(data.sentences) ? data.sentences : initial.sentences,
           listenBest: typeof data.listenBest === 'number' ? data.listenBest : initial.listenBest,
+          listenBestText: typeof data.listenBestText === 'number' ? data.listenBestText : initial.listenBestText,
+          level: data.level === 'picture' || data.level === 'text' ? data.level : initial.level,
           daily: data.daily?.date ? data.daily : initial.daily,
           newBadges: [],
         })),
@@ -248,10 +266,29 @@ export const useStore = create<State>()(
         sentences: s.sentences,
         daily: s.daily,
         listenBest: s.listenBest,
+        listenBestText: s.listenBestText,
+        level: s.level,
       }),
     },
   ),
 )
+
+/** The "Rekor" best score that counts on the given level. */
+export function recordBest(s: Pick<PersistedState, 'listenBest' | 'listenBestText'>, level: GameLevel): number {
+  return level === 'text' ? s.listenBestText : s.listenBest
+}
+
+/** Lists in the order they were added, so the road map follows the school year. */
+export function listsByAge(words: readonly Word[]): string[] {
+  // Lists added in one go share a timestamp; the order of the words then keeps them in sequence.
+  const first = new Map<string, { at: number; index: number }>()
+  words.forEach((w, index) => {
+    const seen = first.get(w.list)
+    if (!seen) first.set(w.list, { at: w.createdAt, index })
+    else if (w.createdAt < seen.at) seen.at = w.createdAt
+  })
+  return [...first.keys()].sort((a, b) => first.get(a)!.at - first.get(b)!.at || first.get(a)!.index - first.get(b)!.index)
+}
 
 export function useLists(): string[] {
   const words = useStore((s) => s.words)
@@ -259,6 +296,6 @@ export function useLists(): string[] {
 }
 
 export function backupOf(s: State): PersistedState {
-  const { words, stars, pin, childName, earnedBadges, sessions, perfectGames, playDays, activeList, outfit, sentences, daily, listenBest } = s
-  return { words, stars, pin, childName, earnedBadges, sessions, perfectGames, playDays, activeList, outfit, sentences, daily, listenBest }
+  const { words, stars, pin, childName, earnedBadges, sessions, perfectGames, playDays, activeList, outfit, sentences, daily, listenBest, listenBestText, level } = s
+  return { words, stars, pin, childName, earnedBadges, sessions, perfectGames, playDays, activeList, outfit, sentences, daily, listenBest, listenBestText, level }
 }

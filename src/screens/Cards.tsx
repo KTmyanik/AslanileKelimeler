@@ -13,6 +13,7 @@ const DECK_SIZE = 10
 export function Cards({ onHome }: { onHome: () => void }) {
   const recordAnswer = useStore((s) => s.recordAnswer)
   const finishSession = useStore((s) => s.finishSession)
+  const level = useStore((s) => s.level)
   const [deck, setDeck] = useState<Word[]>(() => pickWords(getPool().pool, DECK_SIZE))
   const [idx, setIdx] = useState(0)
   const [flipped, setFlipped] = useState(false)
@@ -82,7 +83,8 @@ export function Cards({ onHome }: { onHome: () => void }) {
         >
           <div className={`flip-inner ${flipped ? 'flipped' : ''}`}>
             <div className="flip-face card-soft flex flex-col items-center justify-center gap-4 border-[6px] border-sun p-6">
-              <span className="emoji text-[7rem] sm:text-[8rem]">{word.emoji}</span>
+              {/* On the text level the picture waits on the back, with the meaning. */}
+              {level === 'picture' && <span className="emoji text-[7rem] sm:text-[8rem]">{word.emoji}</span>}
               <span className="text-center text-5xl font-extrabold break-words text-lion-red sm:text-6xl">{word.en}</span>
               <SpeakButton onClick={() => speak(word.en)} />
               <span className="absolute bottom-4 text-base font-bold text-ink-soft">👆 Çevir · Flip</span>

@@ -3,11 +3,12 @@ import { Lion } from '../components/Lion'
 import { KidButton, LionTalk, SpeakButton, TopBar } from '../components/ui'
 import { celebrate } from '../lib/celebrate'
 import { distractors, shuffle } from '../lib/learning'
+import { showsPicture } from '../lib/level'
 import { getPool } from '../lib/pool'
 import { sfx } from '../lib/sfx'
 import { speak } from '../lib/speech'
-import { useStore } from '../store'
-import type { LionMood, Word } from '../types'
+import { recordBest, useStore } from '../store'
+import type { LionMood, Outfit, Word } from '../types'
 
 const LIMIT = 60
 
@@ -31,7 +32,8 @@ function nextRound(avoidId?: string): Round | null {
 }
 
 export function RecordGame({ onHome }: { onHome: () => void }) {
-  const best = useStore((s) => s.listenBest)
+  const level = useStore((s) => s.level)
+  const best = useStore((s) => recordBest(s, s.level))
   const setListenBest = useStore((s) => s.setListenBest)
   const recordAnswer = useStore((s) => s.recordAnswer)
   const finishSession = useStore((s) => s.finishSession)
@@ -54,9 +56,9 @@ export function RecordGame({ onHome }: { onHome: () => void }) {
     ended.current = true
     const finalScore = scoreRef.current
     finishSession(missesRef.current === 0 && finalScore > 0)
-    const beat = finalScore > useStore.getState().listenBest
+    const beat = finalScore > recordBest(useStore.getState(), level)
     if (beat) {
-      setListenBest(finalScore)
+      setListenBest(finalScore, level)
       setIsBest(true)
       celebrate(true)
     }
@@ -124,7 +126,9 @@ export function RecordGame({ onHome }: { onHome: () => void }) {
       {phase === 'ready' && (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
           <LionTalk mood="happy" text={<span>1 dakika!<br />One minute!</span>} />
-          <p className="text-xl font-bold text-ink-soft">Doğru resmi seç. En iyi skorun: {best}</p>
+          <p className="text-xl font-bold text-ink-soft">
+            {level === 'text' ? 'Doğru anlamı seç.' : 'Doğru resmi seç.'} En iyi skorun: {best}
+          </p>
           <KidButton color="red" onClick={start}>
             Başla
           </KidButton>
@@ -213,10 +217,11 @@ function Play({
   onAnswer,
 }: {
   round: Round
-  outfit: 'none' | 'scarf' | 'crown'
+  outfit: Outfit
   mood: LionMood
   onAnswer: (ok: boolean) => void
 }) {
+  const level = useStore((s) => s.level)
   const [locked, setLocked] = useState(false)
 
   useEffect(() => {
@@ -237,6 +242,8 @@ function Play({
       <div className="grid w-full max-w-xl grid-cols-2 gap-3">
         {round.options.map((word) => {
           const show = locked && word.id === round.target.id
+          const held = !showsPicture(word, level)
+          const pic = !held || show
           return (
             <button
               key={word.id}
@@ -249,8 +256,16 @@ function Play({
                 show ? 'border-leaf bg-leaf/10' : 'border-transparent hover:border-sun'
               }`}
             >
-              <span className="emoji text-7xl">{word.emoji}</span>
-              <span className="text-xl font-bold text-ink-soft">{word.tr}</span>
+              {pic && <span className={`emoji text-7xl ${held ? 'animate-pop' : ''}`}>{word.emoji}</span>}
+              <span
+                className={
+                  pic
+                    ? 'text-xl font-bold text-ink-soft'
+                    : 'text-center text-2xl leading-tight font-extrabold break-words sm:text-4xl'
+                }
+              >
+                {word.tr}
+              </span>
             </button>
           )
         })}

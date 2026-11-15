@@ -16,7 +16,15 @@
 - **Dinle ve Seç:** Kelime sesli okunur, çocuk doğru resmi seçer.
 - **Eşleştir:** İngilizce kelimeler resim ve anlamlarıyla eşleştirilir.
 - **Hafıza:** Kelime kartı ile resim kartı çifti bulunur.
-- **Ödüllerim:** Toplanan yıldızlar ve rozetler burada görünür. Aslan için atkı (30 ⭐) ve taç (100 ⭐) kostümleri açılır.
+- **Seviye (Resimli / Resimsiz):** Ana sayfadan seçilir ve cihazda hatırlanır. Resimsiz seviyede resimler ipucu vermez:
+  - Kartlar'da resim kartın arkasına geçer. Diğer oyunlarda yalnızca yazı görünür; resim doğru cevap bulununca ortaya çıkar.
+  - Türkçe anlamı boş olan kelimelerde resim yerinde kalır, çünkü kelimeyi ayırt edecek başka bir şey yoktur.
+  - İpucu oyununda resim yalnızca kendi İngilizce ipucu yazılmış kelimelerde gizlenir (Kelimeler › Düzenle). Kategori ipucu tek başına cevabı göstermez.
+  - Rekor oyununda her seviyenin rekoru ayrı tutulur.
+- **Ödüllerim:** Toplanan yıldızlar ve rozetler burada görünür. Yıldızlarla aslan için kostümler açılır: atkı (30 ⭐), güneş gözlüğü (60), papyon (80), taç (100), parti şapkası (150), büyücü şapkası (250).
+- **Seri ve haftalık hedef:** Ana sayfada üst üste kaç gün çalışıldığı ve bu haftanın günleri görünür. Haftalık hedef 5 gündür. Seri ve haftalık hedef için de rozetler vardır.
+- **Yol Haritası:** Her liste bir duraktır; öğrenilen kelime oranına göre 1-3 yıldız alır. Durağa dokununca oyunlar o listeyle oynanır. Liste sayısı 6'yı geçince ana sayfadaki liste düğmeleri yerine haritaya giden bir bağlantı çıkar.
+- **Çıkartmalarım:** Öğrenilen her kelime bir çıkartma olur. Öğrenilmekte olanlar soluk, hiç çalışılmamışlar "?" görünür.
 
 **Ebeveyn paneli** (ilk PIN: `1234`, Ayarlar'dan değiştirin)
 - **Kelime Ekle:**
@@ -24,6 +32,7 @@
   - Excel dosyası yüklenebilir. İlk sütun İngilizce, ikinci sütun Türkçe olmalı; Türkçe boş bırakılabilir.
   - Kelimeler elle de yazılabilir.
   - Kaydetmeden önce liste kontrol edilip düzenlenebilir.
+- **Paketler:** Konulara ayrılmış 16 hazır paket (191 kelime): hayvanlar, renkler, sayılar, okul, giysiler, yiyecekler ve diğerleri. Kelimeler Cambridge Pre A1 Starters konularından seçilmiştir; resmî listenin tamamı değildir. Her paket kendi adıyla bir liste olarak eklenir; zaten kayıtlı kelimeler atlanır. "Paket hedefi" kaç paket kelimesinin öğrenildiğini gösterir (İlerleme bölümünde de görünür).
 - **Kelimeler:** Arama, filtreleme, düzenleme ve silme.
 - **İlerleme:** Öğrenilen kelimeler, zorlanılan kelimeler, listelere göre durum ve son 14 günün takvimi.
 - **Ayarlar:** Çocuğun adı, PIN, yapay zekâ bağlantı testi, yedek alma ve geri yükleme, ilerlemeyi sıfırlama.

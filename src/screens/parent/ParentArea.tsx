@@ -2,15 +2,17 @@ import { useState, type ReactNode } from 'react'
 import { Lion } from '../../components/Lion'
 import { DEFAULT_PIN, useStore } from '../../store'
 import { AddWords } from './AddWords'
+import { Packs } from './Packs'
 import { Progress } from './Progress'
 import { Settings } from './Settings'
 import { Sentences } from './Sentences'
 import { WordList } from './WordList'
 
-type Tab = 'add' | 'words' | 'sentences' | 'progress' | 'settings'
+type Tab = 'add' | 'packs' | 'words' | 'sentences' | 'progress' | 'settings'
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'add', label: 'Kelime Ekle', icon: '➕' },
+  { id: 'packs', label: 'Paketler', icon: '📦' },
   { id: 'words', label: 'Kelimeler', icon: '📚' },
   { id: 'sentences', label: 'Cümleler', icon: '🔤' },
   { id: 'progress', label: 'İlerleme', icon: '📈' },
@@ -55,6 +57,7 @@ export function ParentArea({ onExit }: { onExit: () => void }) {
       </nav>
 
       {tab === 'add' && <AddWords onSaved={() => setTab('words')} />}
+      {tab === 'packs' && <Packs />}
       {tab === 'words' && <WordList />}
       {tab === 'sentences' && <Sentences />}
       {tab === 'progress' && <Progress />}

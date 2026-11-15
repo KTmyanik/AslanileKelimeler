@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { GameResult, KidButton, LionTalk, ProgressDots, SpeakButton, TopBar } from '../components/ui'
+import { GameResult, KidButton, LionTalk, ProgressDots, PromptPicture, SpeakButton, TopBar } from '../components/ui'
 import { celebrate } from '../lib/celebrate'
-import { clueFor, hintChoices } from '../lib/clue'
+import { clueFor, hasOwnClue, hintChoices } from '../lib/clue'
 import { pickWords, statusOf } from '../lib/learning'
 import { getPool } from '../lib/pool'
 import { sfx } from '../lib/sfx'
@@ -106,8 +106,11 @@ function ClueRound({
   onMiss: () => void
 }) {
   const clue = clueFor(round.target)
+  const level = useStore((s) => s.level)
   const [wrongIds, setWrongIds] = useState<string[]>([])
   const [solved, setSolved] = useState(false)
+  // Without a clue of its own the picture is the only thing that points at this word, so it stays.
+  const held = level === 'text' && hasOwnClue(round.target)
 
   const choose = (word: Word) => {
     if (solved || wrongIds.includes(word.id)) return
@@ -127,7 +130,7 @@ function ClueRound({
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-5 px-4 py-6">
-      <div className="emoji text-8xl">{round.target.emoji}</div>
+      <PromptPicture emoji={round.target.emoji} held={held} revealed={solved} />
       <div className="flex items-center gap-3">
         <SpeakButton onClick={() => speak(clue)} />
         <div>

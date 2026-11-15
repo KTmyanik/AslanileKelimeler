@@ -20,6 +20,11 @@ export function clueFor(word: Word): string {
   return CATEGORY_CLUE[word.category] ?? 'Look at the picture.'
 }
 
+/** Only a clue written for this word can replace its picture: a category clue fits other words too. */
+export function hasOwnClue(word: Word): boolean {
+  return !!word.clue?.trim()
+}
+
 /** Other-category words first, so a category clue still points at one answer. */
 export function hintChoices(all: readonly Word[], target: Word, n: number): Word[] {
   const others = all.filter((word) => word.id !== target.id)

@@ -122,6 +122,24 @@ export function SpeakButton({ onClick, size = 'md' }: { onClick: () => void; siz
   )
 }
 
+/**
+ * The big picture above a question. While it is held back (text level) a "?" box of the
+ * same size stands in for it, so nothing moves when the picture appears with the answer.
+ */
+export function PromptPicture({ emoji, held, revealed }: { emoji: string; held: boolean; revealed: boolean }) {
+  if (held && !revealed) {
+    return (
+      <div
+        aria-hidden
+        className="mx-auto grid size-24 place-items-center rounded-3xl border-4 border-dashed border-ink/20 text-6xl font-extrabold text-ink/25"
+      >
+        ?
+      </div>
+    )
+  }
+  return <div className={`emoji text-8xl ${held ? 'animate-pop' : ''}`}>{emoji}</div>
+}
+
 export function NotEnoughWords({ need, onBack }: { need: number; onBack: () => void }) {
   return (
     <div className="flex flex-col items-center gap-6 px-6 py-16 text-center">

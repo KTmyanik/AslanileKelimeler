@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { GameResult, LionTalk, NotEnoughWords, ProgressDots, TopBar } from '../components/ui'
 import { celebrate } from '../lib/celebrate'
 import { pickWords, shuffle } from '../lib/learning'
+import { showsPicture } from '../lib/level'
 import { getPool } from '../lib/pool'
 import { sfx } from '../lib/sfx'
 import { speak } from '../lib/speech'
@@ -25,6 +26,7 @@ function buildBoards(): Board[] {
 export function MatchGame({ onHome }: { onHome: () => void }) {
   const recordAnswer = useStore((s) => s.recordAnswer)
   const finishSession = useStore((s) => s.finishSession)
+  const level = useStore((s) => s.level)
   const [boards, setBoards] = useState(buildBoards)
   const [board, setBoard] = useState(0)
   const [selL, setSelL] = useState<string | null>(null)
@@ -145,7 +147,7 @@ export function MatchGame({ onHome }: { onHome: () => void }) {
             ) : mood === 'cheer' ? (
               <>Süper! <span className="text-leaf">Great!</span></>
             ) : (
-              <>Kelimeyi resmiyle eşleştir</>
+              <>{level === 'text' ? 'Kelimeyi anlamıyla eşleştir' : 'Kelimeyi resmiyle eşleştir'}</>
             )
           }
         />
@@ -159,12 +161,24 @@ export function MatchGame({ onHome }: { onHome: () => void }) {
             ))}
           </div>
           <div className="flex flex-col gap-3">
-            {current.right.map((w) => (
-              <button key={w.id} onClick={() => pickRight(w)} className={tile(w.id, 'r')}>
-                <span className="emoji text-4xl sm:text-5xl">{w.emoji}</span>
-                <span className="text-left text-lg leading-tight font-bold text-ink-soft">{w.tr}</span>
-              </button>
-            ))}
+            {current.right.map((w) => {
+              const held = !showsPicture(w, level)
+              const pic = !held || matched.includes(w.id)
+              return (
+                <button key={w.id} onClick={() => pickRight(w)} className={tile(w.id, 'r')}>
+                  {pic && <span className={`emoji text-4xl sm:text-5xl ${held ? 'animate-pop' : ''}`}>{w.emoji}</span>}
+                  <span
+                    className={
+                      pic
+                        ? 'text-left text-lg leading-tight font-bold text-ink-soft'
+                        : 'min-w-0 text-center text-2xl leading-tight font-extrabold break-words sm:text-3xl'
+                    }
+                  >
+                    {w.tr}
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>

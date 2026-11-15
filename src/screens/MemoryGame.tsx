@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { GameResult, LionTalk, NotEnoughWords, TopBar } from '../components/ui'
 import { celebrate } from '../lib/celebrate'
 import { pickWords, shuffle } from '../lib/learning'
+import { showsPicture } from '../lib/level'
 import { getPool } from '../lib/pool'
 import { sfx } from '../lib/sfx'
 import { speak } from '../lib/speech'
@@ -29,6 +30,7 @@ function buildTiles(): Tile[] {
 export function MemoryGame({ onHome }: { onHome: () => void }) {
   const recordAnswer = useStore((s) => s.recordAnswer)
   const finishSession = useStore((s) => s.finishSession)
+  const level = useStore((s) => s.level)
   const [tiles, setTiles] = useState(buildTiles)
   const [open, setOpen] = useState<number[]>([])
   const [matched, setMatched] = useState<string[]>([])
@@ -101,7 +103,13 @@ export function MemoryGame({ onHome }: { onHome: () => void }) {
         <LionTalk
           mood={mood}
           size={90}
-          text={mood === 'cheer' ? <>Buldun! <span className="text-leaf">You found it!</span></> : <>Kelimeyi ve resmini bul!</>}
+          text={
+            mood === 'cheer' ? (
+              <>Buldun! <span className="text-leaf">You found it!</span></>
+            ) : (
+              <>{level === 'text' ? 'Kelimeyi ve anlamını bul!' : 'Kelimeyi ve resmini bul!'}</>
+            )
+          }
         />
 
         <div className="grid w-full max-w-xl grid-cols-3 gap-3 sm:grid-cols-4">
@@ -123,11 +131,17 @@ export function MemoryGame({ onHome }: { onHome: () => void }) {
                       <span className="text-center text-xl leading-tight font-extrabold break-words text-lion-red sm:text-2xl">
                         {t.word.en}
                       </span>
-                    ) : (
+                    ) : isMatched || showsPicture(t.word, level) ? (
                       <>
-                        <span className="emoji text-4xl sm:text-5xl">{t.word.emoji}</span>
+                        <span className={`emoji text-4xl sm:text-5xl ${showsPicture(t.word, level) ? '' : 'animate-pop'}`}>
+                          {t.word.emoji}
+                        </span>
                         <span className="text-center text-sm leading-tight font-bold text-ink-soft">{t.word.tr}</span>
                       </>
+                    ) : (
+                      <span className="text-center text-xl leading-tight font-extrabold break-words sm:text-2xl">
+                        {t.word.tr}
+                      </span>
                     )}
                   </div>
                 </div>

@@ -17,7 +17,7 @@ export function Rewards({ onHome }: { onHome: () => void }) {
         <Lion mood="cheer" outfit={outfit} size={150} />
         <div className="flex flex-1 flex-col gap-3">
           <h2 className="text-2xl font-extrabold">Aslanını giydir! <span className="text-lion-red">Dress up!</span></h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
             {OUTFITS.map((o) => {
               const unlocked = stars >= o.stars
               const active = outfit === o.id

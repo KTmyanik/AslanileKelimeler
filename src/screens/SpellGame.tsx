@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Lion } from '../components/Lion'
 import { GameResult, KidButton, NotEnoughWords, ProgressDots, SpeakButton, TopBar } from '../components/ui'
 import { celebrate } from '../lib/celebrate'
+import { showsPicture } from '../lib/level'
 import { getPool } from '../lib/pool'
 import { sfx } from '../lib/sfx'
 import { buildSpellRounds, foldSpelling, isSpellLetter, sameSpelling, type SpellCell, type SpellLevel, type SpellRound } from '../lib/spell'
@@ -168,6 +169,8 @@ function RoundBoard({
 }) {
   const recordAnswer = useStore((s) => s.recordAnswer)
   const outfit = useStore((s) => s.outfit)
+  const gameLevel = useStore((s) => s.level)
+  const held = !showsPicture(round.word, gameLevel)
   const blanks = round.cells.flatMap((cell, i) => (cell.blank ? [i] : []))
   const [values, setValues] = useState<string[]>(() => round.cells.map(() => ''))
   const [active, setActive] = useState(blanks[0] ?? 0)
@@ -314,7 +317,7 @@ function RoundBoard({
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="emoji text-6xl">{round.word.emoji}</span>
+          {(!held || solved) && <span className={`emoji text-6xl ${held ? 'animate-pop' : ''}`}>{round.word.emoji}</span>}
           <div>
             <div className="text-3xl font-extrabold">{round.word.tr || '—'}</div>
             <SpeakButton onClick={() => speak(answer)} />

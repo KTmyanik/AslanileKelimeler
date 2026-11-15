@@ -3,6 +3,7 @@ import { Lion } from '../components/Lion'
 import { GameResult, NotEnoughWords, ProgressDots, SpeakButton, TopBar } from '../components/ui'
 import { celebrate } from '../lib/celebrate'
 import { distractors, pickWords, shuffle } from '../lib/learning'
+import { showsPicture } from '../lib/level'
 import { getPool } from '../lib/pool'
 import { sfx } from '../lib/sfx'
 import { speak } from '../lib/speech'
@@ -30,6 +31,7 @@ export function ListenPick({ onHome }: { onHome: () => void }) {
   const recordAnswer = useStore((s) => s.recordAnswer)
   const finishSession = useStore((s) => s.finishSession)
   const outfit = useStore((s) => s.outfit)
+  const level = useStore((s) => s.level)
   const [rounds, setRounds] = useState(buildRounds)
   const [idx, setIdx] = useState(0)
   const [wrongIds, setWrongIds] = useState<string[]>([])
@@ -107,7 +109,7 @@ export function ListenPick({ onHome }: { onHome: () => void }) {
     ? { tr: 'Doğru!', en: round.target.en }
     : mood === 'sad'
       ? { tr: 'Tekrar dene!', en: 'Try again!' }
-      : { tr: 'Dinle ve doğru resmi seç', en: 'Listen and choose' }
+      : { tr: level === 'text' ? 'Dinle ve anlamını seç' : 'Dinle ve doğru resmi seç', en: 'Listen and choose' }
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-3xl flex-col">
@@ -130,6 +132,8 @@ export function ListenPick({ onHome }: { onHome: () => void }) {
           {round.options.map((w) => {
             const isWrong = wrongIds.includes(w.id)
             const isRight = solved && w.id === round.target.id
+            const held = !showsPicture(w, level)
+            const pic = !held || isRight
             return (
               <button
                 key={w.id}
@@ -144,8 +148,16 @@ export function ListenPick({ onHome }: { onHome: () => void }) {
                         : 'border-transparent hover:border-sun active:scale-95'
                 }`}
               >
-                <span className="emoji text-7xl sm:text-8xl">{w.emoji}</span>
-                <span className="text-center text-xl font-bold text-ink-soft">{w.tr}</span>
+                {pic && <span className={`emoji text-7xl sm:text-8xl ${held ? 'animate-pop' : ''}`}>{w.emoji}</span>}
+                <span
+                  className={
+                    pic
+                      ? 'text-center text-xl font-bold text-ink-soft'
+                      : 'text-center text-2xl leading-tight font-extrabold break-words sm:text-4xl'
+                  }
+                >
+                  {w.tr}
+                </span>
               </button>
             )
           })}
