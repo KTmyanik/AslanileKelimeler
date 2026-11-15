@@ -1,5 +1,5 @@
 import { STATUS_LABEL, STATUS_STYLE, statusOf, todayKey } from '../../lib/learning'
-import { packGoal } from '../../lib/packs'
+import { BOOK, packGoal } from '../../lib/packs'
 import { useLists, useStore } from '../../store'
 import { GoalBar } from './Packs'
 import type { WordStatus } from '../../types'
@@ -14,6 +14,7 @@ export function Progress() {
   const badges = useStore((s) => s.earnedBadges.length)
   const lists = useLists()
   const goal = packGoal(words)
+  const bookGoal = packGoal(words, BOOK.packs)
 
   const count = (st: WordStatus, ws = words) => ws.filter((w) => statusOf(w) === st).length
   const totals = { new: count('new'), learning: count('learning'), learned: count('learned') }
@@ -63,9 +64,15 @@ export function Progress() {
         </p>
       </section>
 
+      {bookGoal.added > 0 && (
+        <section className="card-soft flex flex-col gap-3 p-5">
+          <h2 className="text-lg font-extrabold">📘 {BOOK.title}</h2>
+          <GoalBar goal={bookGoal} />
+        </section>
+      )}
       {goal.added > 0 && (
         <section className="card-soft flex flex-col gap-3 p-5">
-          <h2 className="text-lg font-extrabold">🎯 Paket hedefi</h2>
+          <h2 className="text-lg font-extrabold">🧺 Ek konu paketleri</h2>
           <GoalBar goal={goal} />
         </section>
       )}

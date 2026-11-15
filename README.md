@@ -32,7 +32,10 @@
   - Excel dosyası yüklenebilir. İlk sütun İngilizce, ikinci sütun Türkçe olmalı; Türkçe boş bırakılabilir.
   - Kelimeler elle de yazılabilir.
   - Kaydetmeden önce liste kontrol edilip düzenlenebilir.
-- **Paketler:** Konulara ayrılmış 16 hazır paket (191 kelime): hayvanlar, renkler, sayılar, okul, giysiler, yiyecekler ve diğerleri. Kelimeler Cambridge Pre A1 Starters konularından seçilmiştir; resmî listenin tamamı değildir. Her paket kendi adıyla bir liste olarak eklenir; zaten kayıtlı kelimeler atlanır. "Paket hedefi" kaç paket kelimesinin öğrenildiğini gösterir (İlerleme bölümünde de görünür).
+- **Paketler:**
+  - **Ders kitabı: Cambridge Primary Path 1 (2. baskı).** 9 ünite, ünite başına 21 kelime. Kelimeler Cambridge'in bu kitap için yayımladığı içerik tablosundaki (Level 1 Teacher's Edition, ISBN 978-1-009-79808-2) ünite anahtar kelimeleridir; Türkçe anlamlar ve resimler sonradan eklendi. Her ünite "Unit 1 · Aile" gibi bir liste olur. Başlangıç listesinde ya da konu paketlerinde zaten olan bir kelime, ilerlemesiyle birlikte üniteye taşınır. Ebeveynin kendi oluşturduğu listelere dokunulmaz.
+  - **Ek konu paketleri.** 16 paket, 191 kelime: hayvanlar, renkler, sayılar, okul, giysiler, yiyecekler ve diğerleri. Kelimeler Cambridge Pre A1 Starters konularından seçilmiştir; resmî listenin tamamı değildir. Zaten kayıtlı kelimeler atlanır.
+  - Her iki grubun da hedef çubuğu vardır (İlerleme bölümünde de görünür). Yol Haritası'ndaki "Büyük hedef", kitaptan bir ünite eklendiyse kitabı, eklenmediyse konu paketlerini gösterir.
 - **Kelimeler:** Arama, filtreleme, düzenleme ve silme.
 - **İlerleme:** Öğrenilen kelimeler, zorlanılan kelimeler, listelere göre durum ve son 14 günün takvimi.
 - **Ayarlar:** Çocuğun adı, PIN, yapay zekâ bağlantı testi, yedek alma ve geri yükleme, ilerlemeyi sıfırlama.

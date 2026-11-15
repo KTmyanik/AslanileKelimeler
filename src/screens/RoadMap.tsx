@@ -1,7 +1,7 @@
 import { Lion } from '../components/Lion'
 import { TopBar } from '../components/ui'
 import { statusOf } from '../lib/learning'
-import { packGoal, packOfList } from '../lib/packs'
+import { mainGoal, packOfList } from '../lib/packs'
 import { listsByAge, useStore } from '../store'
 import type { Word } from '../types'
 
@@ -19,7 +19,7 @@ export function RoadMap({ onHome }: { onHome: () => void }) {
   const activeList = useStore((s) => s.activeList)
   const setActiveList = useStore((s) => s.setActiveList)
   const outfit = useStore((s) => s.outfit)
-  const goal = packGoal(words)
+  const goal = mainGoal(words)
 
   const stops = listsByAge(words).map((list) => {
     const ws = words.filter((w) => w.list === list)
@@ -41,7 +41,7 @@ export function RoadMap({ onHome }: { onHome: () => void }) {
         <section className="card-soft mx-4 mt-3 flex items-center gap-3 p-4">
           <span className="emoji text-4xl">🎯</span>
           <div className="min-w-0 flex-1">
-            <div className="font-extrabold">Büyük hedef · Big goal</div>
+            <div className="font-extrabold">Büyük hedef · {goal.label}</div>
             <div className="mt-1 h-4 overflow-hidden rounded-full bg-cream">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-sun to-leaf"

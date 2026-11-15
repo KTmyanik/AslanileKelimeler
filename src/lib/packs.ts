@@ -244,19 +244,253 @@ export const PACKS: Pack[] = [
   ]),
 ]
 
-const PACK_KEYS = new Set(PACKS.flatMap((p) => p.words.map((w) => normalizeEn(w.en))))
-
-/** The pack a list came from, matched by name. */
-export function packOfList(list: string): Pack | undefined {
-  return PACKS.find((p) => p.name === list)
+/**
+ * The school course book, unit by unit. Words are the "Key Words" of each unit in the
+ * Level 1 scope and sequence that Cambridge publishes for the second edition
+ * (Teacher's Edition, ISBN 978-1-009-79808-2). Turkish meanings and pictures are ours.
+ */
+export const BOOK = {
+  title: 'Cambridge Primary Path 1',
+  subtitle: 'Okuldaki ders kitabı (2. baskı)',
+  packs: [
+    pack('cpp1-u1', 'Unit 1 · Aile', '👨‍👩‍👧', 'Aile', [
+      ['father', 'baba', '👨'],
+      ['mother', 'anne', '👩'],
+      ['brother', 'erkek kardeş', '👦'],
+      ['sister', 'kız kardeş', '👧'],
+      ['grandfather', 'büyükbaba', '👴'],
+      ['grandmother', 'büyükanne', '👵'],
+      ['family', 'aile', '👪'],
+      ['parents', 'anne ve baba', '👫'],
+      ['grandparents', 'büyükanne ve büyükbaba', '🧓'],
+      ['aunt', 'teyze, hala', '👩‍🦰'],
+      ['uncle', 'amca, dayı', '👨‍🦱'],
+      ['cousin', 'kuzen', '🧒'],
+      ['house', 'ev', '🏠', 'Ev'],
+      ['backyard', 'arka bahçe', '🏡', 'Ev'],
+      ['apartment', 'apartman dairesi', '🏢', 'Ev'],
+      ['chore', 'ev işi', '🧹', 'Ev'],
+      ['tent', 'çadır', '⛺', 'Diğer'],
+      ['evening', 'akşam', '🌆', 'Diğer'],
+      ['bedtime', 'yatma vakti', '🌙', 'Diğer'],
+      ['pajamas', 'pijama', '👚', 'Giysiler'],
+      ['sleep', 'uyumak', '😴', 'Eylemler'],
+    ]),
+    pack('cpp1-u2', 'Unit 2 · Okul', '🏫', 'Okul', [
+      ['school', 'okul', '🏫'],
+      ['classroom', 'sınıf', '🧑‍🎓'],
+      ['desk', 'sıra', '🪑'],
+      ['teacher', 'öğretmen', '🧑‍🏫'],
+      ['uniform', 'okul forması', '👔'],
+      ['classmate', 'sınıf arkadaşı', '🧑‍🤝‍🧑'],
+      ['music room', 'müzik odası', '🎵'],
+      ['gym', 'spor salonu', '🤸'],
+      ['art room', 'resim odası', '🎨'],
+      ['computer lab', 'bilgisayar laboratuvarı', '💻'],
+      ['principal', 'okul müdürü', '👨‍💼'],
+      ['nurse', 'hemşire', '👩‍⚕️'],
+      ['cafeteria', 'yemekhane', '🍽️'],
+      ['drawing', 'resim, çizim', '🖍️'],
+      ['snack', 'ara öğün', '🍪'],
+      ['new', 'yeni', '🆕'],
+      ['old', 'eski', '🏚️'],
+      ['reading', 'okuma', '📖'],
+      ['writing', 'yazma', '✍️'],
+      ['math', 'matematik', '➕'],
+      ['library', 'kütüphane', '📚'],
+    ]),
+    pack('cpp1-u3', 'Unit 3 · Canlılar', '🌱', 'Doğa', [
+      ['grass', 'çimen', '🌿'],
+      ['flower', 'çiçek', '🌸'],
+      ['ant', 'karınca', '🐜', 'Hayvanlar'],
+      ['earthworm', 'solucan', '🪱', 'Hayvanlar'],
+      ['bee', 'arı', '🐝', 'Hayvanlar'],
+      ['butterfly', 'kelebek', '🦋', 'Hayvanlar'],
+      ['pond', 'gölet', '🏞️'],
+      ['water lily', 'nilüfer', '🪷'],
+      ['mosquito', 'sivrisinek', '🦟', 'Hayvanlar'],
+      ['dragonfly', 'yusufçuk', '🪽', 'Hayvanlar'],
+      ['fish', 'balık', '🐟', 'Hayvanlar'],
+      ['frog', 'kurbağa', '🐸', 'Hayvanlar'],
+      ['tadpole', 'iribaş', '🫧', 'Hayvanlar'],
+      ['tail', 'kuyruk', '🦚', 'Hayvanlar'],
+      ['helicopter', 'helikopter', '🚁', 'Taşıtlar'],
+      ['puppet', 'kukla', '🎭', 'Oyunlar'],
+      ['wood', 'tahta', '🪵'],
+      ['happy', 'mutlu', '😀', 'Duygular'],
+      ['sad', 'üzgün', '😢', 'Duygular'],
+      ['dirty', 'kirli', '🐷', 'Diğer'],
+      ['clean', 'temiz', '🧼', 'Diğer'],
+    ]),
+    pack('cpp1-u4', 'Unit 4 · Arkadaşlar', '🤝', 'Oyunlar', [
+      ['friend', 'arkadaş', '🤝', 'Aile'],
+      ['draw pictures', 'resim çizmek', '🖼️', 'Eylemler'],
+      ['play soccer', 'futbol oynamak', '⚽'],
+      ['ride bikes', 'bisiklete binmek', '🚴'],
+      ['sing songs', 'şarkı söylemek', '🎤', 'Eylemler'],
+      ['read stories', 'hikâye okumak', '📗', 'Eylemler'],
+      ['fly kites', 'uçurtma uçurmak', '🪁'],
+      ['recess', 'teneffüs', '🔔', 'Okul'],
+      ['share', 'paylaşmak', '🤲', 'Eylemler'],
+      ['neighbor', 'komşu', '🏘️', 'Aile'],
+      ['park', 'park', '🌳'],
+      ['swing', 'salıncak', '🎠'],
+      ['slide', 'kaydırak', '🛝'],
+      ['same', 'aynı', '🟰', 'Diğer'],
+      ['homework', 'ödev', '📝', 'Okul'],
+      ['hare', 'yaban tavşanı', '🐇', 'Hayvanlar'],
+      ['hound', 'av köpeği, tazı', '🐕', 'Hayvanlar'],
+      ['goat', 'keçi', '🐐', 'Hayvanlar'],
+      ['ram', 'koç', '🐏', 'Hayvanlar'],
+      ['calf', 'buzağı', '🐄', 'Hayvanlar'],
+      ['chipmunk', 'sincap', '🐿️', 'Hayvanlar'],
+    ]),
+    pack('cpp1-u5', 'Unit 5 · Eğlence', '🎉', 'Oyunlar', [
+      ['jump rope', 'ip atlamak', '🪢'],
+      ['listen to music', 'müzik dinlemek', '🎧'],
+      ['dance', 'dans etmek', '💃', 'Eylemler'],
+      ['play games', 'oyun oynamak', '🎲'],
+      ['bake cookies', 'kurabiye pişirmek', '🍪', 'Eylemler'],
+      ['paint', 'boyamak', '🎨', 'Eylemler'],
+      ['inside', 'içeride', '🛋️', 'Diğer'],
+      ['outside', 'dışarıda', '🌤️', 'Diğer'],
+      ['artisan', 'zanaatkâr', '🧑‍🎨', 'Meslekler'],
+      ['collect', 'biriktirmek', '🗃️', 'Eylemler'],
+      ['travel', 'seyahat etmek', '🧳', 'Eylemler'],
+      ['buy', 'satın almak', '🛒', 'Eylemler'],
+      ['gift', 'hediye', '🎁', 'Diğer'],
+      ['fit', 'uymak, sığmak', '🧩', 'Eylemler'],
+      ['kind', 'nazik', '🥰', 'Duygular'],
+      ['tie', 'bağlamak', '🎀', 'Eylemler'],
+      ['pick up', 'yerden almak', '🫳', 'Eylemler'],
+      ['catch', 'yakalamak', '🧤', 'Eylemler'],
+      ['find', 'bulmak', '🔍', 'Eylemler'],
+      ['make', 'yapmak', '🛠️', 'Eylemler'],
+      ['write', 'yazmak', '✍️', 'Eylemler'],
+    ]),
+    pack('cpp1-u6', 'Unit 6 · Yardım', '🙌', 'Eylemler', [
+      ['sweep the floor', 'yeri süpürmek', '🧹'],
+      ['make the bed', 'yatağı toplamak', '🛏️'],
+      ['water the plants', 'çiçekleri sulamak', '🪴'],
+      ['set the table', 'sofrayı kurmak', '🍽️'],
+      ['donate', 'bağışlamak', '💝'],
+      ['recycle', 'geri dönüştürmek', '♻️'],
+      ['help', 'yardım etmek', '🙌'],
+      ['choose', 'seçmek', '👉'],
+      ['clean up', 'toplamak, temizlemek', '🧽'],
+      ['trash', 'çöp', '🗑️', 'Ev'],
+      ['bring', 'getirmek', '📦'],
+      ['pet', 'evcil hayvan', '🐶', 'Hayvanlar'],
+      ['adopt', 'sahiplenmek', '🤗'],
+      ['list', 'liste', '📋', 'Diğer'],
+      ['chat', 'sohbet etmek', '💬'],
+      ['tidy', 'düzenli, toplu', '✨', 'Diğer'],
+      ['naughty', 'yaramaz', '😜', 'Duygular'],
+      ['dig', 'kazmak', '⛏️'],
+      ['break', 'kırmak', '💔'],
+      ['run away', 'kaçmak', '🏃'],
+      ['call', 'telefonla aramak', '📞'],
+    ]),
+    pack('cpp1-u7', 'Unit 7 · Bitkiler ve Hayvanlar', '🌳', 'Doğa', [
+      ['cheese', 'peynir', '🧀', 'Yiyecekler'],
+      ['eggs', 'yumurtalar', '🥚', 'Yiyecekler'],
+      ['jam', 'reçel', '🍓', 'Yiyecekler'],
+      ['meat', 'et', '🥩', 'Yiyecekler'],
+      ['basket', 'sepet', '🧺', 'Ev'],
+      ['cloth', 'kumaş', '🧵', 'Giysiler'],
+      ['forest', 'orman', '🌲'],
+      ['cave', 'mağara', '🕳️'],
+      ['fly', 'uçmak', '🕊️', 'Eylemler'],
+      ['see', 'görmek', '👀', 'Eylemler'],
+      ['push', 'itmek', '🫸', 'Eylemler'],
+      ['pull', 'çekmek', '🫷', 'Eylemler'],
+      ['rest', 'dinlenmek', '😌', 'Eylemler'],
+      ['wake up', 'uyanmak', '⏰', 'Eylemler'],
+      ['crop', 'ürün, mahsul', '🌾'],
+      ['hive', 'arı kovanı', '🍯'],
+      ['tree', 'ağaç', '🌳'],
+      ['air', 'hava', '🌬️'],
+      ['breathe', 'nefes almak', '😮‍💨', 'Eylemler'],
+      ['seed', 'tohum', '🌰'],
+      ['soil', 'toprak', '🟫'],
+    ]),
+    pack('cpp1-u8', 'Unit 8 · Hayal Gücü', '🦄', 'Diğer', [
+      ['painting', 'tablo, resim', '🖼️'],
+      ['paintbrush', 'fırça', '🖌️', 'Okul'],
+      ['sculpture', 'heykel', '🗿'],
+      ['clay', 'kil', '🏺'],
+      ['camera', 'fotoğraf makinesi', '📷'],
+      ['photograph', 'fotoğraf', '📸'],
+      ['craft', 'el işi', '✂️'],
+      ['dream', 'hayal, rüya', '💭'],
+      ['imagine', 'hayal etmek', '🦄', 'Eylemler'],
+      ['tape', 'bant', '🩹', 'Okul'],
+      ['glue', 'yapıştırıcı', '🧴', 'Okul'],
+      ['let dry', 'kurumaya bırakmak', '☀️', 'Eylemler'],
+      ['decorate', 'süslemek', '🎊', 'Eylemler'],
+      ['creator', 'yaratıcı', '🧑‍🎨', 'Meslekler'],
+      ['dots', 'noktalar', '🔵'],
+      ['take care', 'özen göstermek', '💞', 'Eylemler'],
+      ['hot', 'sıcak', '🥵', 'Duygular'],
+      ['tired', 'yorgun', '🥱', 'Duygular'],
+      ['full', 'tok', '😋', 'Duygular'],
+      ['empty', 'boş', '🫙'],
+      ['thirsty', 'susamış', '🥤', 'Duygular'],
+    ]),
+    pack('cpp1-u9', 'Unit 9 · Giysiler ve Hava', '👕', 'Giysiler', [
+      ['clothes', 'giysiler', '👚'],
+      ['tennis shoes', 'spor ayakkabı', '👟'],
+      ['wear', 'giymek, üstünde olmak', '👕'],
+      ['dress', 'elbise', '👗'],
+      ['sweater', 'kazak', '🧶'],
+      ['jeans', 'kot pantolon', '🤠'],
+      ['pants', 'pantolon', '👖'],
+      ['boots', 'çizme', '👢'],
+      ['coat', 'palto, mont', '🧥'],
+      ['pocket', 'cep', '👝'],
+      ['gloves', 'eldiven', '🧤'],
+      ['scarf', 'atkı', '🧣'],
+      ['take off', 'çıkarmak', '⬇️', 'Eylemler'],
+      ['put on', 'giymek, takmak', '⬆️', 'Eylemler'],
+      ['sunny', 'güneşli', '☀️', 'Hava Durumu'],
+      ['cold', 'soğuk', '🥶', 'Hava Durumu'],
+      ['windy', 'rüzgârlı', '💨', 'Hava Durumu'],
+      ['rainy', 'yağmurlu', '🌧️', 'Hava Durumu'],
+      ['snowy', 'karlı', '❄️', 'Hava Durumu'],
+      ['warm', 'ılık', '🌡️', 'Hava Durumu'],
+      ['bloom', 'çiçek açmak', '🌼', 'Doğa'],
+    ]),
+  ] as Pack[],
 }
 
-/** Progress toward knowing every pack word, whichever list the word sits in. */
-export function packGoal(words: readonly Word[]): { learned: number; added: number; total: number } {
-  const inPacks = words.filter((w) => PACK_KEYS.has(normalizeEn(w.en)))
+export interface Goal {
+  learned: number
+  added: number
+  total: number
+}
+
+/** Progress toward knowing every word of these packs, whichever list the word sits in. */
+export function packGoal(words: readonly Word[], packs: readonly Pack[] = PACKS): Goal {
+  const keys = new Set(packs.flatMap((p) => p.words.map((w) => normalizeEn(w.en))))
+  const inPacks = words.filter((w) => keys.has(normalizeEn(w.en)))
   return {
     learned: inPacks.filter((w) => statusOf(w) === 'learned').length,
     added: inPacks.length,
-    total: PACK_KEYS.size,
+    total: keys.size,
   }
 }
+
+/** The goal worth showing: the course book once any of it is added, else the topic packs. */
+export function mainGoal(words: readonly Word[]): Goal & { label: string } {
+  const book = packGoal(words, BOOK.packs)
+  if (book.added > 0) return { ...book, label: BOOK.title }
+  return { ...packGoal(words, PACKS), label: 'Konu paketleri' }
+}
+
+/** The pack a list came from, matched by name. */
+export function packOfList(list: string): Pack | undefined {
+  return [...BOOK.packs, ...PACKS].find((p) => p.name === list)
+}
+
+/** Lists whose words a book unit may take over: the starter list and the topic packs. */
+export const TAKEOVER_LISTS: readonly string[] = PACKS.map((p) => p.name)

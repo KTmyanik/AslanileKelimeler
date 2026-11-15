@@ -31,6 +31,8 @@ interface PersistedState {
 interface State extends PersistedState {
   newBadges: string[]
   addWords: (drafts: WordDraft[], list: string) => { added: number; skipped: number }
+  /** Adds a pack as its own list; words already in one of `takeFrom` lists move into it with their progress. */
+  addPack: (drafts: WordDraft[], list: string, takeFrom: readonly string[]) => { added: number; moved: number }
   updateWord: (id: string, patch: Partial<Omit<Word, 'id'>>) => void
   deleteWord: (id: string) => void
   deleteList: (list: string) => void
@@ -132,6 +134,20 @@ export const useStore = create<State>()(
         }
         set((s) => ({ words: [...s.words, ...fresh] }))
         return { added: fresh.length, skipped: drafts.length - fresh.length }
+      },
+
+      addPack: (drafts, list, takeFrom) => {
+        const keys = new Set(drafts.map((d) => normalizeEn(d.en)))
+        const movable = new Set([SEED_LIST, ...takeFrom])
+        let moved = 0
+        const words = get().words.map((w) => {
+          if (w.list === list || !movable.has(w.list) || !keys.has(normalizeEn(w.en))) return w
+          moved++
+          return { ...w, list }
+        })
+        set({ words })
+        const { added } = get().addWords(drafts, list)
+        return { added, moved }
       },
 
       updateWord: (id, patch) =>
