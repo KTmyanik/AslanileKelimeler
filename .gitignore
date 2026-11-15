@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Progress file and its daily backups (see server/progress.ts)
+/data

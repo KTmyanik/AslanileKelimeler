@@ -2,6 +2,7 @@ import { useRef, useState, type ReactNode } from 'react'
 import { hasAI, testConnection } from '../../lib/gemini'
 import { canSpeak, speak } from '../../lib/speech'
 import { backupOf, useStore } from '../../store'
+import { useSync } from '../../sync'
 
 export function Settings() {
   const childName = useStore((s) => s.childName)
@@ -9,6 +10,7 @@ export function Settings() {
   const setPin = useStore((s) => s.setPin)
   const resetProgress = useStore((s) => s.resetProgress)
   const importBackup = useStore((s) => s.importBackup)
+  const sync = useSync()
   const [name, setName] = useState(childName)
   const [newPin, setNewPin] = useState('')
   const [msg, setMsg] = useState<string | null>(null)
@@ -91,9 +93,26 @@ export function Settings() {
         {canSpeak && <Btn onClick={() => speak('Hello! I am a lion. Roar!')}>Sesi dene</Btn>}
       </Card>
 
+      <Card title="🔄 Cihazlar arası eşitleme">
+        <p className="font-semibold">
+          {sync.status === 'ok'
+            ? `✅ Bilgisayardaki dosyayla eşit${sync.savedAt ? ` · son kontrol ${new Date(sync.savedAt).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}` : ''}`
+            : sync.status === 'connecting'
+              ? '⏳ Bağlanıyor...'
+              : sync.status === 'offline'
+                ? '⚠️ Bilgisayara ulaşılamıyor. İlerleme bu cihazda tutuluyor, bağlantı gelince gönderilecek.'
+                : '❌ Bu sunucuda eşitleme yok. İlerleme yalnızca bu cihazda.'}
+        </p>
+        <p className="text-sm font-semibold text-ink-soft">
+          İlerleme, uygulamayı çalıştıran bilgisayarda <code>data/ilerleme.json</code> dosyasında tutulur ve her gün{' '}
+          <code>data/yedek</code> klasörüne bir kopyası alınır (son 14 gün). Aynı Wi-Fi'deki tablet ve telefonlar aynı
+          ilerlemeyi görür. Bir güne geri dönmek için aşağıdaki "Yedekten geri yükle" ile o günün dosyasını seçin.
+        </p>
+      </Card>
+
       <Card title="💾 Yedek">
         <p className="text-sm font-semibold text-ink-soft">
-          Tüm kelimeler ve ilerleme bu cihazın tarayıcısında saklanır. Başka bir cihaza taşımak için yedek alıp orada geri yükleyin.
+          Elle yedek almak ya da başka bir bilgisayara taşımak için yedek dosyası indirip orada geri yükleyin.
         </p>
         <div className="flex flex-wrap gap-2">
           <Btn onClick={exportBackup}>⬇️ Yedek indir</Btn>
@@ -109,7 +128,9 @@ export function Settings() {
             e.target.value = ''
             if (!f) return
             try {
-              const data = JSON.parse(await f.text())
+              const parsed = JSON.parse(await f.text())
+              // Daily copies from data/yedek wrap the backup as { rev, savedAt, state }.
+              const data = Array.isArray(parsed?.state?.words) ? parsed.state : parsed
               if (!Array.isArray(data.words)) throw new Error()
               if (confirm(`${data.words.length} kelimelik yedek yüklensin mi? Mevcut veriler değişecek.`)) {
                 importBackup(data)

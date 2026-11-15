@@ -44,6 +44,13 @@
 
 ## Notlar
 
-- Veriler cihazın tarayıcısında saklanır. Bilgisayar ve tablet ayrı verilere sahiptir; taşımak için Ayarlar'daki yedek alma ve geri yükleme özelliğini kullanın.
+- **Veriler ve eşitleme:** İlerleme, uygulamayı çalıştıran bilgisayarda `data/ilerleme.json` dosyasında tutulur. Dosya git'e eklenmez.
+  - Aynı Wi-Fi ağındaki tablet ve telefonlar bu dosyayla eşitlenir. Bir cihazdaki değişiklik birkaç saniye içinde kaydedilir. Diğer cihazlar en geç 20 saniye içinde ya da uygulamaya geri dönülünce yeni durumu alır.
+  - İki cihaz aynı anda kullanılırsa değişiklikler birleştirilir. Yıldızlar ve doğru/yanlış sayıları toplanır, silinen kelimeler silinmiş kalır, iki cihazda eklenen kelimeler tek kopya olur.
+  - Bir cihaz ilk kez bağlandığında kendi ilerlemesi dosyadakiyle birleştirilir; hiçbir şey kaybolmaz.
+  - Tarayıcıdaki kopya önbellek olarak kalır. Bilgisayara ulaşılamazsa çocuk oynamaya devam eder; değişiklikler bağlantı gelince gönderilir. Tarayıcı verisi silinirse ilerleme dosyadan geri gelir.
+  - Seviye (Resimli / Resimsiz) ve seçili liste her cihazda ayrıdır.
+  - Dosyanın günlük kopyası `data/yedek/` klasöründe tutulur (son 14 gün). Bir güne geri dönmek için Ayarlar › "Yedekten geri yükle" ile o günün dosyasını seçin; tüm cihazlar o hale döner.
+  - Durum, Ebeveyn › Ayarlar › Cihazlar arası eşitleme kartında görünür.
 - Gemini API anahtarı `.env.local` dosyasındadır ve git'e eklenmez. Kullanılacak model `VITE_GEMINI_MODEL` ile seçilir. Bu model yoğunsa veya kapatılmışsa uygulama sırayla yedek modelleri dener.
 - Sesli okuma tarayıcının kendi sesini kullanır. En iyi sonuç Chrome veya Edge'de alınır.

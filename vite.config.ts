@@ -1,8 +1,10 @@
 import { randomBytes } from 'node:crypto'
+import { fileURLToPath } from 'node:url'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
+import { progressFile } from './server/progress.ts'
 
 const STASH_TTL_MS = 5 * 60 * 1000
 const STASH_MAX_BYTES = 20_000_000
@@ -89,7 +91,7 @@ function migrateStash(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), migrateStash()],
+  plugins: [react(), tailwindcss(), migrateStash(), progressFile(process.env.ASLAN_DATA_DIR ?? fileURLToPath(new URL('./data', import.meta.url)))],
   server: { host: true, port: 5199, strictPort: true },
   preview: { host: true, port: 5199, strictPort: true },
 })
